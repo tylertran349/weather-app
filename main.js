@@ -1,0 +1,1 @@
+(()=>{"use strict";fetch("https://api.openweathermap.org/data/2.5/weather?q=London&APPID=c0516e126153fdd7ea8c4f9d0a7a0460",{mode:"cors"}).then((function(e){return e.json()})).then((function(e){console.log(e)}))})();
