@@ -1,3 +1,3 @@
-import { getLatAndLon } from '../dist/modules/api';
+import { getLatAndLon, forecastData } from '../dist/modules/api';
 
-getLatAndLon("London", "imperial");
+getLatAndLon("Ely");
