@@ -1,3 +1,3 @@
-import { getWeatherData } from '../dist/modules/api';
+import { getLatAndLon } from '../dist/modules/api';
 
-getWeatherData("London");
+getLatAndLon("London", "imperial");
