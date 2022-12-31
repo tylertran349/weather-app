@@ -1,66 +1,6 @@
-/*
-export function getLatAndLon(location, units) {
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=c0516e126153fdd7ea8c4f9d0a7a0460`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();increments
-    })
-    .then(function(response) {
-        console.log("LOCATION DATA:");
-        console.log(response);
-        console.log(`Location name: ${response[0].name}`); // Name of location
-        console.log(`Latitude: ${response[0].lat}`); // Latitude of location
-        console.log(`Longitude: ${response[0].lon}`); // Longitude of location
-        currentWeatherData(response[0].lat, response[0].lon, units); // Call function to get current weather data
-        fifteenHourForecast(response[0].lat, response[0].lon, units); // Call function to get weather data for next 15 hours
-    })
-    .catch(function(response) {
-        console.log("Error");
-    })
-}
-
-function fifteenHourForecast(lat, lon, units) {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
-        console.log("DATA FOR NEXT 15 HOURS:")
-        console.log(response);
-
-        // Prints out weather data for next five 3-hour increments
-        for(let i = 0; i < 5; i++) {
-            console.log(`Forecast time: ${response.list[i].dt_txt}, ${response.list[i].main.temp} F, ${response.list[i].weather[0].description}, ${(response.list[i].pop) * 100}% precipitation`);
-        }
-    })
-    .catch(function(response) {
-        console.log("Error");
-    })
-}
-
-function currentWeatherData(lat, lon, units) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}&cnt=5`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
-        console.log("CURRENT WEATHER:")
-        console.log(response);
-        console.log(`Current temperature: ${Math.round(response.main.temp)} F`);
-        console.log(`Current feels like: ${Math.round(response.main.feels_like)} F`);
-        console.log(`Current humidity: ${Math.round(response.main.humidity)} %`);
-        console.log(`Current wind speed: ${response.wind.speed} MPH`);
-        console.log(`Current conditions: ${response.weather[0].description}`);
-        console.log(`Current visibility: ${(response.visibility) / 1000} mi`);
-    })
-    .catch(function(response) {
-        console.log("Error");
-    })
-}
-*/
-
 let tempLabel, windLabel, precipLabel, distanceLabel;
 
-export function getLatAndLon(location) {
+export async function getLatAndLon(location) {
     let units = "imperial";
     let tempUnit, windUnit, precipUnit;
     if(units === "imperial") {
@@ -73,65 +13,34 @@ export function getLatAndLon(location) {
         windUnit = "ms";
         precipUnit = "mm";
     }
-    fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
+    try {
+        const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`, {mode: 'cors'});
+        const latAndLon = await response.json();
         console.log("LOCATION DATA:");
-        console.log(response);
-        console.log("Location name: " + response.results[0].name);
-        console.log("Latitude: " + response.results[0].latitude);
-        console.log("Longitude: " + response.results[0].longitude);
-        currentWeatherData(response.results[0].latitude, response.results[0].longitude, units);
-        fifteenHourForecast(response.results[0].latitude, response.results[0].longitude, units);
-        sevenDayForecast(response.results[0].latitude, response.results[0].longitude, tempUnit, windUnit, precipUnit);
-    })
-    .catch(function(response) {
+        console.log(latAndLon);
+        console.log("Location name: " + latAndLon.results[0].name);
+        console.log("Latitude: " + latAndLon.results[0].latitude);
+        console.log("Longitude: " + latAndLon.results[0].longitude);
+
+        makeApiCalls(latAndLon.results[0].latitude, latAndLon.results[0].longitude, units, tempUnit, windUnit, precipUnit)
+    } catch(error) {
         console.log("getLatAndLon error");
-    })
+    }
 }
 
-// Use Open Meteo
-function sevenDayForecast(lat, lon, tempUnit, windUnit, precipUnit) {
-    fetch(`https://api.open-meteo.com/v1/gfs?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&precipitation_unit=${precipUnit}&timezone=auto`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
-        console.log("7 DAY FORECAST");
-        console.log(response);
-        for(let i = 0; i < 7; i++) {
-            console.log(`${response.daily.time[i]}: HIGH ${response.daily.temperature_2m_max[i]} ${tempLabel}, LOW ${response.daily.temperature_2m_min[i]} ${tempLabel}, ${interpretWeatherCode(response.daily.weathercode[i])}`);
-        }
-    })
-    .catch(function(response) {
-        console.log("sevenDayForecast error");
-    })
+// Function to make API calls in the correct order
+async function makeApiCalls(lat, lon, units, tempUnit, windUnit, precipUnit) {
+    try {
+        await currentWeatherData(lat, lon, units);
+        await fifteenHourForecast(lat, lon, units);
+        await sevenDayForecast(lat, lon, tempUnit, windUnit, precipUnit);  
+    } catch(error) {
+        console.log("makeApiCalls error");
+    }
 }
 
 // Use OpenWeatherMap
-function fifteenHourForecast(lat, lon, units) {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
-        console.log("DATA FOR NEXT 15 HOURS:")
-        console.log(response);
-
-        // Prints out weather data for next five 3-hour increments
-        for(let i = 0; i < 5; i++) {
-            console.log(`Forecast time: ${response.list[i].dt_txt}, ${response.list[i].main.temp} F, ${response.list[i].weather[0].description}, ${(response.list[i].pop) * 100}% precipitation`);
-        }
-    })
-    .catch(function(response) {
-        console.log("Error");
-    })
-}
-
-// Use OpenWeatherMap
-function currentWeatherData(lat, lon, units) {
+async function currentWeatherData(lat, lon, units) {
     if(units === "imperial") {
         tempLabel = "°F";
         windLabel = "mph";
@@ -144,23 +53,52 @@ function currentWeatherData(lat, lon, units) {
         precipLabel = "mm";
         distanceLabel = "km"
     }
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}&cnt=5`, {mode: 'cors'})
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(response) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}&cnt=5`, {mode: 'cors'});
+        const currentWeatherData = await response.json();
         console.log("CURRENT WEATHER:")
-        console.log(response);
-        console.log(`Current temperature: ${Math.round(response.main.temp)} ${tempLabel}`);
-        console.log(`Current feels like: ${Math.round(response.main.feels_like)} ${tempLabel} `);
-        console.log(`Current humidity: ${Math.round(response.main.humidity)} %`);
-        console.log(`Current wind speed: ${Math.round(response.wind.speed)} ${windLabel}`);
-        console.log(`Current conditions: ${response.weather[0].description}`);
-        console.log(`Current visibility: ${(response.visibility) / 1000} ${distanceLabel}`);
-    })
-    .catch(function(response) {
-        console.log("currentWeatherData error");
-    })
+        console.log(currentWeatherData);
+        console.log(`Current temperature: ${Math.round(currentWeatherData.main.temp)} ${tempLabel}`);
+        console.log(`Current feels like: ${Math.round(currentWeatherData.main.feels_like)} ${tempLabel} `);
+        console.log(`Current humidity: ${Math.round(currentWeatherData.main.humidity)} %`);
+        console.log(`Current wind speed: ${Math.round(currentWeatherData.wind.speed)} ${windLabel}`);
+        console.log(`Current conditions: ${currentWeatherData.weather[0].description}`);
+        console.log(`Current visibility: ${(currentWeatherData.visibility) / 1000} ${distanceLabel}`);
+    } catch(error) {
+        console.log("currentWeatherData() error");
+    }
+}
+
+// Use OpenWeatherMap
+async function fifteenHourForecast(lat, lon, units) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}`, {mode: 'cors'});
+        const fifteenHourData = await response.json();
+        console.log("DATA FOR NEXT 15 HOURS:")
+        console.log(fifteenHourData);
+
+        // Prints out weather data for next five 3-hour increments
+        for(let i = 0; i < 5; i++) {
+            console.log(`Forecast time: ${fifteenHourData.list[i].dt_txt}, ${fifteenHourData.list[i].main.temp} F, ${fifteenHourData.list[i].weather[0].description}, ${(fifteenHourData.list[i].pop) * 100}% precipitation`);
+        }
+    } catch(error) {
+        console.log("fifteenHourForecast() error");
+    }
+}
+
+// Use Open Meteo
+async function sevenDayForecast(lat, lon, tempUnit, windUnit, precipUnit) {
+    try {
+        const response = await fetch(`https://api.open-meteo.com/v1/gfs?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&precipitation_unit=${precipUnit}&timezone=auto`, {mode: 'cors'});
+        const sevenDayData = await response.json();
+        console.log("7 DAY FORECAST");
+        console.log(sevenDayData);
+        for(let i = 0; i < 7; i++) {
+            console.log(`${sevenDayData.daily.time[i]}: HIGH ${sevenDayData.daily.temperature_2m_max[i]} ${tempLabel}, LOW ${sevenDayData.daily.temperature_2m_min[i]} ${tempLabel}, ${interpretWeatherCode(sevenDayData.daily.weathercode[i])}`);
+        }
+    } catch(error) {
+        console.log("sevenDayForecast error");
+    }
 }
 
 // Convert WMO weather code to weather description
