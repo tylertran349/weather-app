@@ -1,0 +1,143 @@
+* {
+    --rounded-corner-value: 0.5rem;
+    --primary-color: white;
+    --secondary-color: #303030;
+    --section-padding: 1rem;
+    --subsection-gap: 1rem;
+}
+
+html {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 10px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-image: url('images/stormy-clouds.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--primary-color);
+    gap: 2rem;
+}
+
+#title {
+    font-size: 6rem;
+    margin: 3rem;
+}
+
+#form {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+}
+
+#search-box {
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    text-align: center;
+    font-family: inherit;
+    color: inherit;
+    border-radius: var(--rounded-corner-value) 0 0 var(--rounded-corner-value);
+    border: 0;
+    outline: none;
+}
+
+#search-button {
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    text-align: center;
+    font-family: inherit;
+    background: 	var(--secondary-color);
+    color: var(--primary-color);
+    border: 0;
+    border-radius: 0 var(--rounded-corner-value) var(--rounded-corner-value) 0;
+}
+
+#current-weather {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    display: grid;
+    grid-template: repeat(5, auto) / repeat(2, 1fr); /* 5 rows, 2 columns */
+    text-align: center;
+    justify-items: center;
+    align-items: center;
+    gap: var(--subsection-gap) 0; /* 1rem row gap, 0 column gap */
+    font-size: 2rem; /* 2rem font size if not explicitly defined elsewhere */
+    padding: var(--section-padding);
+    border-radius: var(--rounded-corner-value);
+}
+
+#current-weather #section-title {
+    font-size: 3rem;
+    grid-column: 1 / span 2;
+}
+
+#current-weather #temp {
+    font-size: 5rem;
+    font-weight: bold;
+}
+
+#current-weather #icon {
+    width: 7rem;
+    aspect-ratio: 1 / 1;
+}
+
+#current-weather #description {
+    grid-column: 1 / span 2;
+}
+
+#current-weather #subsection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#current-weather #subsection #value {
+    font-weight: bold;
+}
+
+#hour-by-hour-weather {
+    width: 50vw;
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: var(--rounded-corner-value);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--subsection-gap);
+    padding: var(--section-padding);
+}
+
+#hour-by-hour-weather #section-title-test {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+#subsections {
+    display: grid;
+    grid-template: auto / repeat(5, auto);
+}
+
+#hour-by-hour-weather #subsection {
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: var(--section-padding);
+    gap: var(--subsection-gap);
+}
+
+#hour-by-hour-weather #subsection #icon {
+    width: 7rem;
+    aspect-ratio: 1 / 1;
+}
