@@ -45,7 +45,7 @@ body {
     padding: 0.5rem;
     text-align: center;
     font-family: inherit;
-    color: inherit;
+    color: var(--secondary-color);
     border-radius: var(--rounded-corner-value) 0 0 var(--rounded-corner-value);
     border: 0;
     outline: none;
@@ -105,8 +105,8 @@ body {
     font-weight: bold;
 }
 
-#hour-by-hour-weather {
-    width: 50vw;
+#hour-by-hour-weather, #seven-day-weather {
+    width: 60vw;
     background: var(--primary-color);
     color: var(--secondary-color);
     border-radius: var(--rounded-corner-value);
@@ -117,17 +117,20 @@ body {
     padding: var(--section-padding);
 }
 
-#hour-by-hour-weather #section-title-test {
+#section-title-test {
     font-size: 3rem;
     font-weight: bold;
 }
 
 #subsections {
     display: grid;
-    grid-template: auto / repeat(5, auto);
+    grid-template: auto / repeat(5, calc(20%)); /* Make each individual hourly forecast take up 20% of the div's total width */
+    grid-auto-flow: column;
+    grid-auto-columns: calc(20%);
+    overflow: auto;
 }
 
-#hour-by-hour-weather #subsection {
+#subsection {
     font-size: 2rem;
     display: flex;
     flex-direction: column;
@@ -137,7 +140,56 @@ body {
     gap: var(--subsection-gap);
 }
 
-#hour-by-hour-weather #subsection #icon {
+#subsection #icon {
     width: 7rem;
     aspect-ratio: 1 / 1;
+}
+
+/* Scrollbar styling for Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 white; /* Make scrollbar thumb light grey and scrollbar track white for Firefox */
+}
+
+/* Scrollbar height for Webkit browsers  */
+::-webkit-scrollbar {
+    height: 0.8rem;
+}
+
+/* Scrollbar thumb color for Webkit browsers  */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Darken scrollbar thumb on hover for Webkit browsers  */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Footer styling */
+#footer-contents {
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#footer a[target="_blank"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* GitHub footer icon styling */
+.fa-github {
+    color: var(--primary-color);
+    font-size: 2.4rem;
+    transition: transform 0.3s ease-in-out;
+}
+  
+/* GitHub footer icon animation on hover */
+.fa-github:hover {
+    transform: rotate(360deg) scale(1.2);
 }
