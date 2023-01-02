@@ -1,7 +1,12 @@
-let tempLabel, windLabel, precipLabel, distanceLabel;
+import { displayCurrentWeather, updateDisplayLabelUnits } from './dom';
 
-export async function getLatAndLon(location) {
-    let units = "imperial";
+let tempLabel, windLabel, precipLabel, distanceLabel;
+let units = "imperial";
+
+export async function searchLocation(location) {
+    // Update display label units first before preceeding
+    updateDisplayLabelUnits(units);
+
     let tempUnit, windUnit, precipUnit;
     if(units === "imperial") {
         tempUnit = "fahrenheit";
@@ -16,15 +21,9 @@ export async function getLatAndLon(location) {
     try {
         const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`, {mode: 'cors'});
         const latAndLon = await response.json();
-        console.log("LOCATION DATA:");
-        console.log(latAndLon);
-        console.log("Location name: " + latAndLon.results[0].name);
-        console.log("Latitude: " + latAndLon.results[0].latitude);
-        console.log("Longitude: " + latAndLon.results[0].longitude);
-
         makeApiCalls(latAndLon.results[0].latitude, latAndLon.results[0].longitude, units, tempUnit, windUnit, precipUnit)
     } catch(error) {
-        console.log("getLatAndLon error");
+        console.log("searchLocation error");
     }
 }
 
@@ -32,8 +31,8 @@ export async function getLatAndLon(location) {
 async function makeApiCalls(lat, lon, units, tempUnit, windUnit, precipUnit) {
     try {
         await currentWeatherData(lat, lon, units);
-        await fifteenHourForecast(lat, lon, units);
-        await sevenDayForecast(lat, lon, tempUnit, windUnit, precipUnit);  
+        //await fifteenHourForecast(lat, lon, units);
+        //await sevenDayForecast(lat, lon, tempUnit, windUnit, precipUnit);  
     } catch(error) {
         console.log("makeApiCalls error");
     }
@@ -58,12 +57,15 @@ async function currentWeatherData(lat, lon, units) {
         const currentWeatherData = await response.json();
         console.log("CURRENT WEATHER:")
         console.log(currentWeatherData);
-        console.log(`Current temperature: ${Math.round(currentWeatherData.main.temp)} ${tempLabel}`);
-        console.log(`Current feels like: ${Math.round(currentWeatherData.main.feels_like)} ${tempLabel} `);
-        console.log(`Current humidity: ${Math.round(currentWeatherData.main.humidity)} %`);
-        console.log(`Current wind speed: ${Math.round(currentWeatherData.wind.speed)} ${windLabel}`);
-        console.log(`Current conditions: ${currentWeatherData.weather[0].description}`);
-        console.log(`Current visibility: ${(currentWeatherData.visibility) / 1000} ${distanceLabel}`);
+
+        // Create object
+        let currentWeatherObject = {location: currentWeatherData.name, country: currentWeatherData.sys.country, 
+            temp: currentWeatherData.main.temp, description: currentWeatherData.weather[0].description, 
+            feelsLike: currentWeatherData.main.feels_like, wind: currentWeatherData.wind.speed, 
+            humidity: currentWeatherData.main.humidity, visibility: currentWeatherData.visibility};
+        
+        // Pass object into external DOM function
+        displayCurrentWeather(currentWeatherObject);
     } catch(error) {
         console.log("currentWeatherData() error");
     }

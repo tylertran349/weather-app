@@ -1,13 +1,11 @@
-import { getLatAndLon } from '../dist/modules/api';
-
-getLatAndLon(79832);
+import { searchLocation } from '../dist/modules/api';
 
 let searchButton = document.querySelector('#search-button');
 let searchBox = document.querySelector('#search-box');
 
-function printGreeting(event) {
+function searchWeather(event) {
     event.preventDefault();
-    console.log(searchBox.value);
+    searchLocation(searchBox.value);
 }
 
-searchButton.addEventListener('click', printGreeting, false);
+searchButton.addEventListener('click', searchWeather, false);
