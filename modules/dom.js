@@ -19,7 +19,7 @@ export function updateDisplayLabelUnits(units) {
 
 export function displayCurrentWeather(obj) {
     // Clear any weather data that is currently on the screen before displaying new weather data
-    //clearWeatherDisplay();
+    clearWeatherDisplay();
 
     let currentWeather = document.createElement('div');
     let title = document.createElement('span');
