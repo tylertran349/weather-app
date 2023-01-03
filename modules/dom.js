@@ -128,3 +128,12 @@ function clearWeatherDisplay() {
         sevenDayWeather.remove();
     }
 }
+
+export function showErrorPopup(text) {
+    document.querySelector('#error-message').textContent = text; // Add the current error message to the error popup before displaying error popup
+    document.querySelector('#error-popup').style.display = "flex";
+}
+
+export function hideErrorPopup() {
+    document.querySelector('#error-popup').style.display = "none";
+}

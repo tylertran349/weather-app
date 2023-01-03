@@ -1,4 +1,4 @@
-import { displayCurrentWeather } from './dom';
+import { displayCurrentWeather, showErrorPopup, hideErrorPopup } from './dom';
 import { weatherAppObject } from '../../src/index';
 
 export async function searchLocation(location) {
@@ -6,9 +6,10 @@ export async function searchLocation(location) {
     try {
         const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`, {mode: 'cors'});
         const latAndLon = await response.json();
-        makeApiCalls(latAndLon.results[0].latitude, latAndLon.results[0].longitude, weatherAppObject.units, weatherAppObject.tempUnit, weatherAppObject.windUnit, weatherAppObject.precipUnit)
+        makeApiCalls(latAndLon.results[0].latitude, latAndLon.results[0].longitude, weatherAppObject.units, weatherAppObject.tempUnit, weatherAppObject.windUnit, weatherAppObject.precipUnit);
+        hideErrorPopup();
     } catch(error) {
-        console.log("searchLocation error");
+        showErrorPopup("Invalid city or zip code, please try again");
     }
 }
 
@@ -38,7 +39,8 @@ async function currentWeatherData(lat, lon, units) {
         
         // Pass object into external DOM function
         displayCurrentWeather(currentWeatherObject);
+        hideErrorPopup();
     } catch(error) {
-        console.log("currentWeatherData() error");
+        showErrorPopup("OpenWeatherMap API error, please try again");
     }
 }
