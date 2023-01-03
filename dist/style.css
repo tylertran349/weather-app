@@ -21,6 +21,21 @@ body {
     background-size: cover;
 }
 
+#error-popup {
+    max-width: 34rem;
+    border: 0.3rem solid red;
+    background: rgba(255, 0, 0, 0.4);
+    display: none;
+    justify-content: center;
+    border-radius: var(--rounded-corner-value);
+}
+
+#error-message {
+    font-size: 1.75rem;
+    text-align: center;
+    padding: var(--section-padding);
+}
+
 #content {
     display: flex;
     flex-direction: column;
