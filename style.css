@@ -67,6 +67,7 @@ body {
 }
 
 #search-box {
+    min-width: 30rem;
     font-size: 1.75rem;
     padding: 0.5rem;
     text-align: center;
