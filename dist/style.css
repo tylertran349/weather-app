@@ -6,13 +6,8 @@
     --subsection-gap: 1rem;
 }
 
-@font-face {
-    font-family: Segoe-UI;
-    src: url(assets/segoe-ui/Segoe-UI.ttf);
-}
-
 html {
-    font-family: Segoe-UI, 'Ubuntu', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 10px;
 }
 
