@@ -141,15 +141,15 @@ function interpretOpenWeatherIcon(iconCode) {
 function clearWeatherDisplay() {
     let currentWeather = document.querySelector('#current-weather');
     let hourByHourWeather = document.querySelector('#hour-by-hour-weather');
-    let sevenDayWeather = document.querySelector('#seven-day-weather');
+    let fourteenDayWeather = document.querySelector('#fourteen-day-weather');
     if(currentWeather !== null) {
         currentWeather.remove();
     }
     if(hourByHourWeather !== null) {
         hourByHourWeather.remove();
     }
-    if(sevenDayWeather !== null) {
-        sevenDayWeather.remove();
+    if(fourteenDayWeather !== null) {
+        fourteenDayWeather.remove();
     }
 }
 
@@ -178,7 +178,6 @@ export function displayHourByHourWeather(obj) {
         let subsection = document.createElement('div');
         subsection.setAttribute('id', 'subsection');
 
-        console.log(`${obj.hourlyTimes[i]} ${obj.hourlyDescriptions[i]} ${obj.hourlyTemps[i]} ${obj.hourlyWinds[i]}`);
         let dateAndTime = document.createElement('span');
         let tempDate = new Date(obj.hourlyTimes[i] * 1000).toLocaleDateString("en-US"); // Formats Unix date to MM/DD/YYYY
         let tempTime = new Date(obj.hourlyTimes[i] * 1000).toLocaleTimeString("en-US"); // Formats Unix time to the following format: 8:00:00 PM
@@ -227,30 +226,20 @@ function weatherCodeToDescription(code) {
         return "Partly cloudy";
     } else if(code === 3) {
         return "Overcast";
-    } else if(code === 45) {
+    } else if(code === 45 || code === 48) {
         return "Fog";
-    } else if(code === 48) {
-        return "Depositing rime fog";
-    } else if(code === 51) {
-        return "Light drizzle";
-    } else if(code === 53) {
-        return "Moderate drizzle";
-    } else if(code === 55) {
-        return "Drizzle: dense intensity";
-    } else if(code === 56) {
-        return "Light freezing drizzle";
-    } else if(code === 57) {
-        return "Freezing drizzle: dense intensity";
+    } else if(code === 51 || code === 53 || code === 55) {
+        return "Drizzle";
+    } else if(code === 56 || code === 57) {
+        return "Freezing drizzle";
     } else if(code === 61) {
         return "Light rain";
     } else if(code === 63) {
         return "Moderate rain";
     } else if(code === 65) {
         return "Heavy rain";
-    } else if(code === 66) {
-        return "Light freezing rain";
-    } else if(code === 67) {
-        return "Heavy freezing rain";
+    } else if(code === 66 || code === 67) {
+        return "Freezing rain";
     } else if(code === 71) {
         return "Light snow";
     } else if(code === 73) {
@@ -259,24 +248,16 @@ function weatherCodeToDescription(code) {
         return "Heavy snow";
     } else if(code === 77) {
         return "Snow grains";
-    } else if(code === 80) {
+    } else if(code === 80 || code === 81 || code === 82) {
         return "Light rain showers";
-    } else if(code === 81) {
-        return "Moderate rain showers";
-    } else if(code === 82) {
-        return "Violent rain showers";
     } else if(code === 85) {
         return "Light snow showers";
     } else if(code === 86) {
         return "Heavy snow showers";
-    } else if(code === 95) {
-        return "Thunderstorm, slight or moderate, without hail";
-    } else if(code === 96) {
-        return "Thunderstorm, slight or moderate, with hail";
-    } else if(code === 99) {
-        return "Thunderstorm, heavy, with hail";
+    } else if(code === 95 || code === 96 || code === 99) {
+        return "Thunderstorms";
     } else {
-        return "Weather description error";
+        return "Description error";
     }
 }
 
@@ -340,4 +321,52 @@ function weatherCodeToIcon(code) {
     } else {
         return "unknown.svg";
     }
+}
+
+export function displayFourteenDayWeather(obj) {
+    let fourteenDayWeather = document.createElement('div');
+    fourteenDayWeather.setAttribute('id', 'fourteen-day-weather');
+
+    let sectionTitle = document.createElement('span');
+    sectionTitle.textContent = "14-Day Forecast";
+    sectionTitle.setAttribute('id', 'section-title');
+    fourteenDayWeather.appendChild(sectionTitle);
+
+    let subsections = document.createElement('div');
+    subsections.setAttribute('id', 'subsections');
+
+    for(let i = 0; i < 14; i++) {
+        let subsection = document.createElement('div');
+        subsection.setAttribute('id', 'subsection');
+
+        let dateAndTime = document.createElement('span');
+        let tempDate = new Date(obj.dailyDates[i] * 1000).toLocaleDateString("en-US"); // Formats Unix date to MM/DD/YYYY
+        dateAndTime.textContent = `${tempDate.slice(0, -5)}`;
+        dateAndTime.setAttribute('id', 'date-and-time');
+        subsection.appendChild(dateAndTime);
+
+        let icon = document.createElement('img');
+        icon.setAttribute('src', `./images/${weatherCodeToIcon(obj.dailyDescriptions[i])}`);
+        icon.setAttribute('title', `${weatherCodeToDescription(obj.dailyDescriptions[i])}`);
+        icon.setAttribute('id', 'icon');
+        subsection.appendChild(icon);
+
+        let description = document.createElement('span');
+        description.textContent = `${weatherCodeToDescription(obj.dailyDescriptions[i])}`;
+        description.setAttribute('id', 'description');
+        subsection.appendChild(description);
+
+        let highTemp = document.createElement('span');
+        highTemp.innerHTML = `High <strong>${Math.round(obj.dailyHighs[i])} ${weatherAppObject.tempLabel}</strong>`;
+        subsection.appendChild(highTemp);
+
+        let lowTemp = document.createElement('span');
+        lowTemp.innerHTML = `Low <strong>${Math.round(obj.dailyLows[i])} ${weatherAppObject.tempLabel}</strong>`;
+        subsection.appendChild(lowTemp);
+
+        subsections.appendChild(subsection);
+    }
+
+    fourteenDayWeather.appendChild(subsections);
+    content.appendChild(fourteenDayWeather);
 }
