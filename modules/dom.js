@@ -139,17 +139,23 @@ function interpretOpenWeatherIcon(iconCode) {
 }
 
 function clearWeatherDisplay() {
-    let currentWeather = document.querySelector('#current-weather');
-    let hourByHourWeather = document.querySelector('#hour-by-hour-weather');
-    let fourteenDayWeather = document.querySelector('#fourteen-day-weather');
+    let currentWeather = document.querySelectorAll('#current-weather');
+    let hourByHourWeather = document.querySelectorAll('#hour-by-hour-weather');
+    let fourteenDayWeather = document.querySelectorAll('#fourteen-day-weather');
     if(currentWeather !== null) {
-        currentWeather.remove();
+        currentWeather.forEach((element) => {
+            element.remove();
+        });
     }
     if(hourByHourWeather !== null) {
-        hourByHourWeather.remove();
+        hourByHourWeather.forEach((element) => {
+            element.remove();
+        });
     }
     if(fourteenDayWeather !== null) {
-        fourteenDayWeather.remove();
+        fourteenDayWeather.forEach((element) => {
+            element.remove();
+        });
     }
 }
 
