@@ -7,7 +7,7 @@
 }
 
 html {
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Segoe UI', 'Ubuntu', sans-serif;
     font-size: 10px;
 }
 
@@ -52,6 +52,7 @@ body {
 #title {
     font-size: 6rem;
     margin: 3rem;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 #form {
@@ -183,6 +184,7 @@ body {
 #current-weather #section-title {
     font-size: 3rem;
     grid-column: 1 / span 2;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 #current-weather #temp {
@@ -224,6 +226,7 @@ body {
 #hour-by-hour-weather #section-title, #fourteen-day-weather #section-title {
     font-size: 3rem;
     font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 #subsections {
@@ -252,7 +255,7 @@ body {
 /* Scrollbar styling for Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #888 white; /* Make scrollbar thumb light grey and scrollbar track white for Firefox */
+    scrollbar-color: #888 var(--primary-color); /* Make scrollbar thumb light grey and scrollbar track white for Firefox */
 }
 
 /* Scrollbar height for Webkit browsers  */
