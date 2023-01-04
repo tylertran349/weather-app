@@ -77,21 +77,18 @@ body {
     border-radius: 0 var(--rounded-corner-value) var(--rounded-corner-value) 0;
 }
 
-/* Units toggle switch styling */
-
-/* The switch - the box around the slider */
-
-#switch-celcius {
+/* UNITS TOGGLE SWITCH STYLING */
+#switch-fahrenheit {
     width: 43.33%;
-    color: black;
+    color: var(--secondary-color);
     text-align: center;
     position: relative; /* Always shows text over toggle switch no matter what */
     font-size: 1.5rem;
 }
 
-#switch-fahrenheit {
+#switch-celsius {
     width: 43.33%;
-    color: black;
+    color: var(--primary-color);
     text-align: center;
     position: relative; /* Always shows text over toggle switch no matter what */
     font-size: 1.5rem;
@@ -120,7 +117,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--secondary-color);
     -webkit-transition: .4s;
     transition: .4s;
   }
@@ -132,17 +129,17 @@ body {
     width: 2.6rem;
     left: 0.4rem;
     bottom: 0.4rem;
-    background-color: white;
+    background-color: var(--primary-color);
     -webkit-transition: .4s;
     transition: .4s;
   }
   
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: var(--secondary-color);
   }
   
   input:focus + .slider {
-    box-shadow: 0 0 0.1rem #2196F3;
+    box-shadow: 0 0 0.1rem var(--secondary-color);
   }
   
   input:checked + .slider:before {
@@ -163,7 +160,7 @@ body {
     border-radius: 50%;
   }
 
-/* END Units toggle switch styling */
+/* END UNITS TOGGLE SWITCH STYLING */
 
 #current-weather {
     background: var(--primary-color);
@@ -220,7 +217,7 @@ body {
     padding: var(--section-padding);
 }
 
-#section-title-test {
+#hour-by-hour-weather #section-title, #seven-day-weather #section-title {
     font-size: 3rem;
     font-weight: bold;
 }

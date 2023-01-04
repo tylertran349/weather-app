@@ -1,14 +1,6 @@
 import { searchLocation } from '../dist/modules/api';
 
-let searchButton = document.querySelector('#search-button');
-let searchBox = document.querySelector('#search-box');
-let checkbox = document.querySelector('#checkbox');
-
-function greeting() {
-    console.log("Hello world");
-}
-
-export class WeatherAppController {
+class WeatherAppController {
     constructor(units, tempUnit, windUnit, precipUnit, tempLabel, windLabel, precipLabel, distanceLabel) {
         this.units = units;
         this.tempUnit = tempUnit;
@@ -69,45 +61,31 @@ export class WeatherAppController {
     set distanceLabel(distanceLabel) {
         this._distanceLabel = distanceLabel;
     }
+
+    changeUnits(units) {
+        weatherAppObject.units = units;
+        if(weatherAppObject.units === "imperial") {
+            weatherAppObject.tempUnit = "fahrenheit";
+            weatherAppObject.windUnit = "mph";
+            weatherAppObject.precipUnit = "inch";
+            weatherAppObject.tempLabel = "°F";
+            weatherAppObject.windLabel = "mph";
+            weatherAppObject.precipLabel = "in";
+            weatherAppObject.distanceLabel = "mi";
+        }
+        if(weatherAppObject.units === "metric") {
+            weatherAppObject.tempUnit = "celsius";
+            weatherAppObject.windUnit = "ms";
+            weatherAppObject.precipUnit = "mm";
+            weatherAppObject.tempLabel = "°C";
+            weatherAppObject.windLabel = "m/s";
+            weatherAppObject.precipLabel = "mm";
+            weatherAppObject.distanceLabel = "km";
+        }
+        console.log(document.querySelector('#search-box').value);
+        searchLocation(document.querySelector('#search-box').value); // Search whatever is in the location search box to display new units
+    }
 }
 
 export let weatherAppObject = new WeatherAppController("imperial", "fahrenheit", "mph", "inch", "°F", "mph", 
 "in", "mi"); // Create weather object (stores units for the entire webpage)
-
-function searchWeather(event) {
-    event.preventDefault();
-    searchLocation(searchBox.value);
-}
-
-searchButton.addEventListener('click', searchWeather, false);
-checkbox.addEventListener('change', function() {
-    if(this.checked) {
-        changeUnits("metric"); // Call changeUnits to change units in api.js
-    } else {
-        changeUnits("imperial"); // Call changeUnits to change units in api.js
-    }
-});
-
-function changeUnits(units) {
-    weatherAppObject.units = units;
-    if(weatherAppObject.units === "imperial") {
-        weatherAppObject.tempUnit = "fahrenheit";
-        weatherAppObject.windUnit = "mph";
-        weatherAppObject.precipUnit = "inch";
-        weatherAppObject.tempLabel = "°F";
-        weatherAppObject.windLabel = "mph";
-        weatherAppObject.precipLabel = "in";
-        weatherAppObject.distanceLabel = "mi";
-    }
-    if(weatherAppObject.units === "metric") {
-        weatherAppObject.tempUnit = "celsius";
-        weatherAppObject.windUnit = "ms";
-        weatherAppObject.precipUnit = "mm";
-        weatherAppObject.tempLabel = "°C";
-        weatherAppObject.windLabel = "m/s";
-        weatherAppObject.precipLabel = "mm";
-        weatherAppObject.distanceLabel = "km";
-    }
-    console.log(document.querySelector('#search-box').value);
-    searchLocation(document.querySelector('#search-box').value); // Re-search whatever was in the location search box to display new units
-}
