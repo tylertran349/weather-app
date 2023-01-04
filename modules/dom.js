@@ -53,7 +53,7 @@ export function displayCurrentWeather(obj) {
     currentWeather.appendChild(temp);
 
     icon.setAttribute('id', 'icon');
-    icon.setAttribute('src', `./images/${interpretOpenWeatherIcon(obj.icon)}`);
+    icon.setAttribute('src', `./assets/${interpretOpenWeatherIcon(obj.icon)}`);
     icon.setAttribute('title', `${obj.description.charAt(0).toUpperCase() + (obj.description).slice(1)}`);
     currentWeather.appendChild(icon);
 
@@ -186,7 +186,7 @@ export function displayHourByHourWeather(obj) {
         subsection.appendChild(dateAndTime);
 
         let icon = document.createElement('img');
-        icon.setAttribute('src', `./images/${weatherCodeToIcon(obj.hourlyDescriptions[i])}`);
+        icon.setAttribute('src', `./assets/${weatherCodeToIcon(obj.hourlyDescriptions[i])}`);
         icon.setAttribute('title', `${weatherCodeToDescription(obj.hourlyDescriptions[i])}`);
         icon.setAttribute('id', 'icon');
         subsection.appendChild(icon);
@@ -346,7 +346,7 @@ export function displayFourteenDayWeather(obj) {
         subsection.appendChild(dateAndTime);
 
         let icon = document.createElement('img');
-        icon.setAttribute('src', `./images/${weatherCodeToIcon(obj.dailyDescriptions[i])}`);
+        icon.setAttribute('src', `./assets/${weatherCodeToIcon(obj.dailyDescriptions[i])}`);
         icon.setAttribute('title', `${weatherCodeToDescription(obj.dailyDescriptions[i])}`);
         icon.setAttribute('id', 'icon');
         subsection.appendChild(icon);
