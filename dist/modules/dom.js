@@ -107,7 +107,7 @@ export function displayCurrentWeather(obj) {
     valueTitle.textContent = "Visibility";
     valueTitle.setAttribute('id', 'value-title');
     subsection.appendChild(valueTitle);
-    value.textContent = `${obj.visibility / 1000} ${weatherAppObject.distanceLabel}`;
+    value.textContent = `${Math.round(obj.visibility / 1000)} ${weatherAppObject.distanceLabel}`;
     value.setAttribute('id', 'value');
     subsection.setAttribute('id', 'subsection');
     subsection.appendChild(value);
