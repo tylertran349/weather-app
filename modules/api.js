@@ -1,11 +1,10 @@
-import { displayCurrentWeather, showErrorPopup, hideErrorPopup, displayHourByHourWeather } from './dom';
+import { displayCurrentWeather, showErrorPopup, hideErrorPopup, displayHourByHourWeather, displayFourteenDayWeather } from './dom';
 import { weatherAppObject } from '../../src/index';
 
 export async function searchLocation(location) {
     if(location === "") {
         return; // If search box value is empty, end this function right here
     }
-    console.log("WeatherAppController units: " + weatherAppObject.units);
     try {
         const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`, {mode: 'cors'});
         const latAndLon = await response.json();
@@ -19,8 +18,8 @@ export async function searchLocation(location) {
 // Function to make all 3 API calls in the correct order
 async function makeApiCalls(lat, lon, units, tempUnit, windUnit, precipUnit) {
     try {
-        await callOpenWeatherMap(lat, lon, units);
-        await callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit);
+        await callOpenWeatherMap(lat, lon, units); // For current weather data
+        await callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit); // For hourly and 14-day forecast data
     } catch(error) {
         showErrorPopup("makeApiCalls() error, please try again")
     }
@@ -31,8 +30,6 @@ async function callOpenWeatherMap(lat, lon, units) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}&cnt=5`, {mode: 'cors'});
         const openWeatherMapData = await response.json();
-        console.log("CURRENT WEATHER:")
-        console.log(openWeatherMapData);
 
         // Create object to pass into displayCurrentWeather in dom.js
         let currentWeatherObject = {location: openWeatherMapData.name, country: openWeatherMapData.sys.country, 
@@ -53,9 +50,8 @@ async function callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit) {
     try {
         const response = await fetch(`https://api.open-meteo.com/v1/gfs?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&precipitation_unit=${precipUnit}&timeformat=unixtime&forecast_days=16&timezone=auto`, {mode: 'cors'});
         const openMeteoData = await response.json();
-        console.log("OPEN METEO DATA:");
-        console.log(openMeteoData);
 
+        // HOUR-BY-HOUR FORECAST
         // Create new empty hourly weather data arrays every time this function is called
         let hourlyTimeArray = [];
         let hourlyDescriptionArray = [];
@@ -77,6 +73,23 @@ async function callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit) {
         let hourlyWeatherObject = {hourlyTimes: hourlyTimeArray, hourlyDescriptions: hourlyDescriptionArray,
         hourlyTemps: hourlyTempArray, hourlyWinds: hourlyWindArray};
         displayHourByHourWeather(hourlyWeatherObject);
+
+        // 14-DAY FORECAST
+        let dailyDateArray = [];
+        let dailyDescriptionArray = [];
+        let dailyHighArray = [];
+        let dailyLowArray = [];
+
+        for(let i = 0; i < 14; i++) {
+            dailyDateArray.push(openMeteoData.daily.time[i]);
+            dailyDescriptionArray.push(openMeteoData.daily.weathercode[i]);
+            dailyHighArray.push(openMeteoData.daily.temperature_2m_max[i]);
+            dailyLowArray.push(openMeteoData.daily.temperature_2m_min[i]);
+        }
+
+        let fourteenDayWeatherObject = {dailyDates: dailyDateArray, dailyDescriptions: dailyDescriptionArray, 
+        dailyHighs: dailyHighArray, dailyLows: dailyLowArray};
+        displayFourteenDayWeather(fourteenDayWeatherObject);
         hideErrorPopup();
     } catch(error) {
         showErrorPopup("Open Meteo API error, please try again");
