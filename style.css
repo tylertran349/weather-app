@@ -19,6 +19,10 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #error-popup {
@@ -39,6 +43,7 @@ body {
 #content {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     color: var(--primary-color);
     gap: 2rem;
@@ -159,7 +164,6 @@ body {
   .slider.round:before {
     border-radius: 50%;
   }
-
 /* END UNITS TOGGLE SWITCH STYLING */
 
 #current-weather {
@@ -205,7 +209,7 @@ body {
     font-weight: bold;
 }
 
-#hour-by-hour-weather, #seven-day-weather {
+#hour-by-hour-weather, #fourteen-day-weather {
     width: 60vw;
     background: var(--primary-color);
     color: var(--secondary-color);
@@ -217,7 +221,7 @@ body {
     padding: var(--section-padding);
 }
 
-#hour-by-hour-weather #section-title, #seven-day-weather #section-title {
+#hour-by-hour-weather #section-title, #fourteen-day-weather #section-title {
     font-size: 3rem;
     font-weight: bold;
 }
@@ -267,11 +271,21 @@ body {
 }
 
 /* Footer styling */
+#footer {
+    width: 100%;
+    text-align: center;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 #footer-contents {
     font-size: 1.6rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 
