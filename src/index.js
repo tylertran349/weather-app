@@ -82,7 +82,6 @@ class WeatherAppController {
             weatherAppObject.precipLabel = "mm";
             weatherAppObject.distanceLabel = "km";
         }
-        console.log(document.querySelector('#search-box').value);
         searchLocation(document.querySelector('#search-box').value); // Search whatever is in the location search box to display new units
     }
 }
