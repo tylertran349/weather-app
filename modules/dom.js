@@ -180,7 +180,7 @@ export function displayHourByHourWeather(obj) {
     let subsections = document.createElement('div');
     subsections.setAttribute('id', 'subsections');
 
-    for(let i = 0; i < 12; i++) {
+    for(let i = 0; i < obj.hourlyTimes.length; i++) {
         let subsection = document.createElement('div');
         subsection.setAttribute('id', 'subsection');
 
@@ -341,13 +341,17 @@ export function displayFourteenDayWeather(obj) {
     let subsections = document.createElement('div');
     subsections.setAttribute('id', 'subsections');
 
-    for(let i = 0; i < 14; i++) {
+    for(let i = 0; i < obj.dailyDates.length; i++) {
         let subsection = document.createElement('div');
         subsection.setAttribute('id', 'subsection');
 
         let dateAndTime = document.createElement('span');
         let tempDate = new Date(obj.dailyDates[i] * 1000).toLocaleDateString("en-US"); // Formats Unix date to MM/DD/YYYY
-        dateAndTime.textContent = `${tempDate.slice(0, -5)}`;
+        if(i === 0) {
+            dateAndTime.textContent = "Today"; // If date is today's date, set date value to "Today"
+        } else {
+            dateAndTime.textContent = `${tempDate.slice(0, -5)}`;
+        }
         dateAndTime.setAttribute('id', 'date-and-time');
         subsection.appendChild(dateAndTime);
 
