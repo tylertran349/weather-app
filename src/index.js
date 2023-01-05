@@ -1,7 +1,7 @@
 import { searchLocation } from '../dist/modules/api';
 
 class WeatherAppController {
-    constructor(units, tempUnit, windUnit, precipUnit, tempLabel, windLabel, precipLabel, distanceLabel) {
+    constructor(units, tempUnit, windUnit, precipUnit, tempLabel, windLabel, precipLabel, distanceLabel, numHourlyForecasts, numDailyForecasts) {
         this.units = units;
         this.tempUnit = tempUnit;
         this.windUnit = windUnit;
@@ -10,6 +10,8 @@ class WeatherAppController {
         this.windLabel = windLabel;
         this.precipLabel = precipLabel;
         this.distanceLabel = distanceLabel;
+        this.numHourlyForecasts = numHourlyForecasts;
+        this.numDailyForecasts = numDailyForecasts;
     }
 
     get units() {
@@ -36,6 +38,12 @@ class WeatherAppController {
     get distanceLabel() {
         return this._distanceLabel;
     }
+    get numHourlyForecasts() {
+        return this._numHourlyForecasts;
+    }
+    get numDailyForecasts() {
+        return this._numDailyForecasts;
+    }
 
     set units(units) {
         this._units = units;
@@ -60,6 +68,12 @@ class WeatherAppController {
     }
     set distanceLabel(distanceLabel) {
         this._distanceLabel = distanceLabel;
+    }
+    set numHourlyForecasts(numHourlyForecasts) {
+        this._numHourlyForecasts = numHourlyForecasts;
+    }
+    set numDailyForecasts(numDailyForecasts) {
+        this._numDailyForecasts = numDailyForecasts;
     }
 
     changeUnits(units) {
@@ -87,4 +101,4 @@ class WeatherAppController {
 }
 
 export let weatherAppObject = new WeatherAppController("imperial", "fahrenheit", "mph", "inch", "°F", "mph", 
-"in", "mi"); // Create weather object (stores units for the entire webpage)
+"in", "mi", 24, 14); // Create weather object (stores units for the entire webpage)
