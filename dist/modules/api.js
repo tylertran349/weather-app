@@ -60,7 +60,7 @@ async function callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit) {
 
         for(let i = 0; i < openMeteoData.hourly.time.length; i++) {
             if(openMeteoData.hourly.time[i] === openMeteoData.current_weather.time) {
-                for(let j = i + 1; j <= i + 12; j++) { // i + 12 gets hourly data for next 12 hours, i + 7 gets hourly data for next 7 hours, etc.
+                for(let j = i + 1; j <= i + (weatherAppObject.numHourlyForecasts); j++) {
                     hourlyTimeArray.push(openMeteoData.hourly.time[j]);
                     hourlyDescriptionArray.push(openMeteoData.hourly.weathercode[j]);
                     hourlyTempArray.push(openMeteoData.hourly.temperature_2m[j]);
@@ -80,7 +80,7 @@ async function callOpenMeteo(lat, lon, tempUnit, windUnit, precipUnit) {
         let dailyHighArray = [];
         let dailyLowArray = [];
 
-        for(let i = 0; i < 14; i++) {
+        for(let i = 0; i < weatherAppObject.numDailyForecasts; i++) {
             dailyDateArray.push(openMeteoData.daily.time[i]);
             dailyDescriptionArray.push(openMeteoData.daily.weathercode[i]);
             dailyHighArray.push(openMeteoData.daily.temperature_2m_max[i]);
