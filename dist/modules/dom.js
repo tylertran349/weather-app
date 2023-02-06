@@ -184,12 +184,16 @@ export function displayHourByHourWeather(obj) {
         let subsection = document.createElement('div');
         subsection.setAttribute('id', 'subsection');
 
-        let dateAndTime = document.createElement('span');
+        let time = document.createElement('span');
+        let date = document.createElement('span');
         let tempDate = new Date(obj.hourlyTimes[i] * 1000).toLocaleDateString("en-US"); // Formats Unix date to MM/DD/YYYY
         let tempTime = new Date(obj.hourlyTimes[i] * 1000).toLocaleTimeString("en-US"); // Formats Unix time to the following format: 8:00:00 PM
-        dateAndTime.textContent = `${tempDate.slice(0, -5)} ${formatTime(tempTime)}`;
-        dateAndTime.setAttribute('id', 'date-and-time');
-        subsection.appendChild(dateAndTime);
+        time.textContent = `${formatTime(tempTime)}`;
+        date.textContent = `${tempDate.slice(0, -5)}`;
+        time.setAttribute('id', 'time');
+        date.setAttribute('id', 'date');
+        subsection.appendChild(time);
+        subsection.appendChild(date);
 
         let icon = document.createElement('img');
         icon.setAttribute('src', `./assets/${weatherCodeToIcon(obj.hourlyDescriptions[i])}`);
@@ -220,7 +224,7 @@ export function displayHourByHourWeather(obj) {
 // Function to convert 8:00:00 PM to 8PM
 function formatTime(time) {
     let data = time.split(':');
-    return `${data[0]}${data[2].slice(3, 5)}`;
+    return `${data[0]} ${data[2].slice(3, 5)}`;
 }
 
 function weatherCodeToDescription(code) {
@@ -352,7 +356,7 @@ export function displayFourteenDayWeather(obj) {
         } else {
             dateAndTime.textContent = `${tempDate.slice(0, -5)}`;
         }
-        dateAndTime.setAttribute('id', 'date-and-time');
+        dateAndTime.setAttribute('id', 'date');
         subsection.appendChild(dateAndTime);
 
         let icon = document.createElement('img');
