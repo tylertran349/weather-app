@@ -1,5 +1,6 @@
 import { displayCurrentWeather, showErrorPopup, hideErrorPopup, displayHourByHourWeather, displayFourteenDayWeather } from './dom';
 import { weatherAppObject } from '../../src/index';
+require('dotenv').config();
 
 export async function searchLocation(location) {
     if(location === "") {
@@ -28,7 +29,7 @@ async function makeApiCalls(lat, lon, units, tempUnit, windUnit, precipUnit) {
 // Use OpenWeatherMap
 async function callOpenWeatherMap(lat, lon, units) {
     try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c0516e126153fdd7ea8c4f9d0a7a0460&units=${units}&cnt=5`, {mode: 'cors'});
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}&units=${units}&cnt=5`, {mode: 'cors'});
         const openWeatherMapData = await response.json();
 
         // Create object to pass into displayCurrentWeather in dom.js
