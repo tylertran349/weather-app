@@ -1,5 +1,6 @@
 # Weather App
-[Live App](https://tylertran349.github.io/weather-app/)
+[Live App](https://tylertran349.github.io/weather-app/)  
+
 Search any location for its forecast data.
 - Displays current, hourly, and 14-day forecast data for a given location
 - Displays data in imperial or metric units
